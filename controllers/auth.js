@@ -8,10 +8,15 @@ const sendMail = require('../utils/sendMail');
 // --- Helper Functions ---
 
 // Creates and sends a JWT token in the response
-const sendTokenResponse = (user, statusCode, res) => {
+const sendTokenResponse = (user, statusCode, res, endpoint = '/api/auth/login') => {
     const token = user.getSignedJwtToken();
     const userResponse = { _id: user._id, name: user.name, lastname: user.lastname, email: user.email, role: user.role, profilePicture: user.profilePicture };
-    res.status(statusCode).json({ success: true, token, user: userResponse });
+    res.status(statusCode).json({
+        success: true,
+        token,
+        user: userResponse,
+        endpoint
+    });
 };
 
 // Returns a formatted HTML string for the verification email
@@ -76,7 +81,11 @@ exports.register = asyncHandler(async (req, res, next) => {
             subject: 'DevOverflow - Please Verify Your Email Address',
             html: getVerificationEmailTemplate(user.name, verificationUrl)
         });
-        res.status(201).json({ success: true, message: 'Registration successful! Please check your email to verify your account.' });
+        res.status(201).json({
+            success: true,
+            message: 'Registration successful! Please check your email to verify your account.',
+            endpoint: '/api/auth/register'
+        });
     } catch (err) {
         user.verificationToken = undefined;
         user.verificationExpire = undefined;
@@ -107,6 +116,7 @@ exports.verifyEmail = asyncHandler(async (req, res, next) => {
     res.status(200).json({
         success: true,
         message: `${user.name} ${user.lastname} verified successfully!`,
+        endpoint: '/api/auth/verify',
         user: {
             name: user.name,
             lastname: user.lastname,
@@ -165,7 +175,11 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
             subject: 'DevOverflow - Password Reset Request',
             html: getPasswordResetEmailTemplate(user.name, resetUrl)
         });
-        res.status(200).json({ success: true, message: 'Password reset email sent' });
+        res.status(200).json({
+            success: true,
+            message: 'Password reset email sent',
+            endpoint: '/api/auth/forgotPassword'
+        });
     } catch (err) {
         user.resetPasswordToken = undefined;
         user.resetPasswordExpire = undefined;
@@ -208,5 +222,9 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
 // @access    Private
 exports.getMe = asyncHandler(async (req, res, next) => {
     const user = await User.findById(req.user.id);
-    res.status(200).json({ success: true, data: user });
+    res.status(200).json({
+        success: true,
+        data: user,
+        endpoint: '/api/auth/me'
+    });
 });
