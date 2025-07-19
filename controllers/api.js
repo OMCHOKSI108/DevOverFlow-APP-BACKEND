@@ -1,189 +1,105 @@
 const asyncHandler = require('../middleware/async');
 
-// @desc      Get API endpoints documentation
-// @route     GET /api
-// @access    Public
-exports.getApiEndpoints = asyncHandler(async (req, res, next) => {
+/**
+ * @desc    Get API Documentation
+ * @route   GET /api
+ * @access  Public
+ */
+const getApiEndpoints = asyncHandler(async (req, res, next) => {
+    // Handle OPTIONS request for documentation
+    if (req.method === 'OPTIONS') {
+        return res.status(200).json({
+            success: true,
+            endpoint: '/api',
+            method: 'GET',
+            description: 'Get API documentation and endpoint listing',
+            features: [
+                '📚 Complete API documentation',
+                '🔍 Detailed endpoint listing',
+                '📱 Mobile feature showcase',
+                '⚡ Tech stack information'
+            ],
+            returns: 'API documentation with all endpoints and features'
+        });
+    }
+
+    // Main API documentation
     res.status(200).json({
         success: true,
         message: "🚀 Welcome to DevOverflow API - Mobile Ready!",
         version: "2.0.0",
         description: "A modern Q&A platform for developers",
         endpoints: {
-            "🔐 Authentication": "/api/auth",
-            "👥 Users & Friends": "/api/users",
-            "❓ Questions": "/api/questions",
-            "💬 Answers": "/api/answer",
-            "📝 Comments": "/api/comments",
-            "🤖 AI Features": "/api/ai",
-            "📁 File Upload": "/api/upload",
-            "⚙️ Admin": "/api/admin",
-            "🗄️ Database Viewer": "/api/database",
-            details: {
-                auth: {
-                    login: {
-                        endpoint: "/api/auth/login",
-                        method: "POST",
-                        description: "Login user",
-                        body: {
-                            email: "string",
-                            password: "string"
-                        }
-                    },
-                    verify: {
-                        endpoint: "/api/auth/verify/:token",
-                        method: "GET",
-                        description: "Verify user email"
-                    },
-                    forgotPassword: {
-                        endpoint: "/api/auth/forgotPassword",
-                        method: "POST",
-                        description: "Request password reset",
-                        body: {
-                            email: "string"
-                        }
-                    },
-                    resetPassword: {
-                        endpoint: "/api/auth/resetPassword",
-                        method: "POST",
-                        description: "Reset password",
-                        body: {
-                            token: "string",
-                            new_password: "string",
-                            confirm_password: "string"
-                        }
-                    },
-                    me: {
-                        endpoint: "/api/auth/me",
-                        method: "GET",
-                        description: "Get logged in user",
-                        protected: true
-                    }
-                },
-                questions: {
-                    list: {
-                        endpoint: "/api/questions",
-                        method: "GET",
-                        description: "Get all questions",
-                        query: {
-                            page: "number",
-                            limit: "number",
-                            sort: "string",
-                            tags: "string[]"
-                        }
-                    },
-                    create: {
-                        endpoint: "/api/questions",
-                        method: "POST",
-                        description: "Create new question",
-                        protected: true,
-                        body: {
-                            title: "string",
-                            body: "string",
-                            tags: "string[]"
-                        }
-                    },
-                    get: {
-                        endpoint: "/api/questions/:id",
-                        method: "GET",
-                        description: "Get single question"
-                    },
-                    vote: {
-                        endpoint: "/api/questions/:id/vote",
-                        method: "POST",
-                        description: "Vote on question",
-                        protected: true,
-                        body: {
-                            vote: "'up' | 'down'"
-                        }
-                    },
-                    search: {
-                        endpoint: "/api/questions/search",
-                        method: "GET",
-                        description: "Search questions",
-                        query: {
-                            q: "string",
-                            tags: "string[]"
-                        }
-                    }
-                },
-                answers: {
-                    create: {
-                        endpoint: "/api/answer/:questionId",
-                        method: "POST",
-                        description: "Add answer to question",
-                        protected: true,
-                        body: {
-                            body: "string"
-                        }
-                    },
-                    vote: {
-                        endpoint: "/api/answer/:id/vote",
-                        method: "POST",
-                        description: "Vote on answer",
-                        protected: true,
-                        body: {
-                            vote: "'up' | 'down'"
-                        }
-                    },
-                    accept: {
-                        endpoint: "/api/answer/:id/accept",
-                        method: "POST",
-                        description: "Accept answer",
-                        protected: true
-                    }
-                },
-                ai: {
-                    status: {
-                        endpoint: "/api/ai/status",
-                        method: "GET",
-                        description: "Check AI service status"
-                    },
-                    answerSuggestion: {
-                        endpoint: "/api/ai/answer-suggestion/:questionId",
-                        method: "GET",
-                        description: "Get AI-generated answer suggestion",
-                        protected: true
-                    },
-                    tagSuggestions: {
-                        endpoint: "/api/ai/tag-suggestions",
-                        method: "POST",
-                        description: "Get AI-suggested tags",
-                        protected: true,
-                        body: {
-                            questionContent: "string"
-                        }
-                    },
-                    chatbot: {
-                        endpoint: "/api/ai/chatbot",
-                        method: "POST",
-                        description: "Interact with AI chatbot",
-                        protected: true,
-                        body: {
-                            query: "string",
-                            apiKey: "string (optional)"
-                        }
-                    }
-                },
-                comments: {
-                    questionComment: {
-                        endpoint: "/api/comments/question/:questionId",
-                        method: "POST",
-                        description: "Add comment to question",
-                        protected: true,
-                        body: {
-                            content: "string"
-                        }
-                    },
-                    answerComment: {
-                        endpoint: "/api/comments/answer/:answerId",
-                        method: "POST",
-                        description: "Add comment to answer",
-                        protected: true,
-                        body: {
-                            content: "string"
-                        }
-                    }
+            "🔐 Authentication": {
+                base: "/api/auth",
+                routes: {
+                    "register": "/api/auth/register",
+                    "login": "/api/auth/login",
+                    "verify": "/api/auth/verify/:token",
+                    "forgot-password": "/api/auth/forgotPassword",
+                    "reset-password": "/api/auth/resetPassword",
+                    "me": "/api/auth/me"
+                }
+            },
+            "👥 Users & Friends": {
+                base: "/api/users",
+                routes: {
+                    "get-all": "/api/users",
+                    "get-one": "/api/users/:id"
+                }
+            },
+            "❓ Questions": {
+                base: "/api/questions",
+                routes: {
+                    "list": "/api/questions",
+                    "create": "/api/questions",
+                    "get": "/api/questions/:id",
+                    "search": "/api/questions/search",
+                    "trending-tags": "/api/questions/tags/trending",
+                    "vote": "/api/questions/:id/vote"
+                }
+            },
+            "💬 Answers": {
+                base: "/api/answer",
+                routes: {
+                    "create": "/api/answer/:questionId",
+                    "update": "/api/answer/:id",
+                    "delete": "/api/answer/:id",
+                    "vote": "/api/answer/:id/vote",
+                    "accept": "/api/answer/:id/accept"
+                }
+            },
+            "📝 Comments": {
+                base: "/api/comments",
+                routes: {
+                    "question-comments": "/api/comments/question/:questionId",
+                    "answer-comments": "/api/comments/answer/:answerId",
+                    "vote": "/api/comments/:id/vote"
+                }
+            },
+            "🤖 AI Features": {
+                base: "/api/ai",
+                routes: {
+                    "status": "/api/ai/status",
+                    "answer-suggestion": "/api/ai/answer-suggestion/:id",
+                    "tag-suggestions": "/api/ai/tag-suggestions",
+                    "chatbot": "/api/ai/chatbot"
+                }
+            },
+            "📁 File Upload": {
+                base: "/api/upload",
+                routes: {
+                    "config": "/api/upload/config",
+                    "single": "/api/upload/single",
+                    "profile": "/api/upload/profile"
+                }
+            },
+            "⚙️ Admin": {
+                base: "/api/admin",
+                routes: {
+                    "users": "/api/admin/users",
+                    "questions": "/api/admin/questions",
+                    "stats": "/api/admin/stats"
                 }
             }
         },
@@ -206,6 +122,11 @@ exports.getApiEndpoints = asyncHandler(async (req, res, next) => {
             ai: "Google Gemini Pro",
             storage: "Uploadcare CDN",
             mobile: "REST API optimized"
-        }
+        },
+        docs_tip: "💡 Send OPTIONS request to any endpoint for detailed documentation"
     });
 });
+
+module.exports = {
+    getApiEndpoints
+};
