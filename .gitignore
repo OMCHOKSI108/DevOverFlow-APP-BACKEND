@@ -1,0 +1,127 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Production
+/build
+/dist
+/.next/
+/out/
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+
+# Shell Scripts
+*.sh
+*.bash
+*.zsh
+*.fish
+code.sh
+scripts/
+shell/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+error.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Directory for instrumented libs
+lib-cov
+
+# Coverage directory
+coverage
+.nyc_output
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+.DS_Store
+*.pem
+Thumbs.db
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# npm & yarn
+.npm
+.yarn-integrity
+*.tgz
+.eslintcache
+.node_repl_history
+
+# Database
+*.sqlite
+
+# Temporary files
+*.swp
+*.swo
+*~
+
+# Project specific
+data-export/
+token.txt
+question_ids.json
+/uploads/*
+!/uploads/.gitkeep
+
+# Python virtual environment
+venv/
+env/
+.env/
+.venv/
+ENV/
+
+# AI model files
+*.gguf
+*.bin
+model-cache/
