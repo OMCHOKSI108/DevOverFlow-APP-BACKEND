@@ -1,6 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const morgan =require('morgan');
+const morgan = require('morgan');
 const path = require('path');
 const winston = require('winston');
 
@@ -17,6 +17,7 @@ const commentsRoutes = require('./routes/comments');
 const aiRoutes = require('./routes/ai');
 const uploadRoutes = require('./routes/upload');
 const adminRoutes = require('./routes/admin');
+const apiRoutes = require('./routes/api');
 const errorHandler = require('./middleware/error');
 
 // Connect to database
@@ -45,6 +46,7 @@ global.logger = logger;
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Mount routers
+app.use('/api', apiRoutes); // Mount API documentation route first
 app.use('/api/auth', authRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/questions', questionsRoutes);

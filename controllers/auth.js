@@ -120,6 +120,26 @@ exports.register = asyncHandler(async (req, res, next) => {
 // @desc      Verify user's email
 // @route     GET /api/auth/verify/:token
 exports.verifyEmail = asyncHandler(async (req, res, next) => {
+    // API Documentation for /api/auth/verify/:token
+    if (req.method === 'OPTIONS') {
+        return res.status(200).json({
+            success: true,
+            endpoint: '/api/auth/verify/:token',
+            method: 'GET',
+            description: 'Verify user email address',
+            parameters: {
+                token: 'Verification token from email (required)'
+            },
+            features: [
+                '✉️ Email verification',
+                '🔒 Secure token validation',
+                '⚡ Automatic login after verification',
+                '👤 Returns user profile'
+            ],
+            returns: 'Success message with user details'
+        });
+    }
+
     const verificationToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
     const user = await User.findOne({
         verificationToken,
@@ -203,7 +223,26 @@ exports.login = asyncHandler(async (req, res, next) => {
 // @desc      Forgot password
 // @route     POST /api/auth/forgotPassword
 exports.forgotPassword = asyncHandler(async (req, res, next) => {
-    // ... logic remains similar, but now using the professional email template ...
+    // API Documentation for /api/auth/forgotPassword
+    if (req.method === 'OPTIONS') {
+        return res.status(200).json({
+            success: true,
+            endpoint: '/api/auth/forgotPassword',
+            method: 'POST',
+            description: 'Request password reset email',
+            requirements: {
+                email: 'Valid email of registered user (required)'
+            },
+            features: [
+                '✉️ Secure reset link',
+                '⏱️ 1-hour token validity',
+                '🎨 Professional email template',
+                '🔒 Token encryption'
+            ],
+            returns: 'Success message with email confirmation'
+        });
+    }
+
     const user = await User.findOne({ email: req.body.email });
     if (!user || !user.isVerified) {
         return next(new ErrorResponse('There is no verified user with that email', 404));
@@ -235,6 +274,28 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 // @desc      Reset password
 // @route     POST /api/auth/resetPassword
 exports.resetPassword = asyncHandler(async (req, res, next) => {
+    // API Documentation for /api/auth/resetPassword
+    if (req.method === 'OPTIONS') {
+        return res.status(200).json({
+            success: true,
+            endpoint: '/api/auth/resetPassword',
+            method: 'POST',
+            description: 'Reset user password using token',
+            requirements: {
+                token: 'Reset token from email (required)',
+                new_password: 'New password string, min 6 chars (required)',
+                confirm_password: 'Must match new_password (required)'
+            },
+            features: [
+                '🔐 Secure password update',
+                '🔄 Token validation',
+                '⚡ Automatic login after reset',
+                '🔒 Password encryption'
+            ],
+            returns: 'Success with new JWT token'
+        });
+    }
+
     const { token, new_password, confirm_password } = req.body;
 
     if (new_password !== confirm_password) {
@@ -265,11 +326,28 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
 // @route     GET /api/auth/me
 // @access    Private
 exports.getMe = asyncHandler(async (req, res, next) => {
+    // API Documentation for /api/auth/me
+    if (req.method === 'OPTIONS') {
+        return res.status(200).json({
+            success: true,
+            endpoint: '/api/auth/me',
+            method: 'GET',
+            description: 'Get currently logged in user profile',
+            authentication: 'JWT Token in Authorization header required',
+            features: [
+                '👤 Full profile data',
+                '🔒 Secure authentication',
+                '⚡ Real-time user data',
+                '📱 Mobile-ready response'
+            ],
+            returns: 'User profile data'
+        });
+    }
+
     const user = await User.findById(req.user.id);
     res.status(200).json({
         success: true,
         data: user,
         endpoint: '/api/auth/me'
     });
-
 });
