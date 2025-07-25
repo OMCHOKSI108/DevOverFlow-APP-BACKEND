@@ -11,6 +11,7 @@ A modern Q&A platform that combines traditional Stack Overflow features with AI-
 
 ## Core Features
 
+
 ### 1. Authentication System
 - Email-based registration with verification
 - Secure login with JWT tokens
